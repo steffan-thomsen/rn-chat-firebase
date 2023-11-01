@@ -45,6 +45,7 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-RNChatFirebase-RNChatFirebaseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNChatFirebase-RNChatFirebaseTests.release.xcconfig"; path = "Target Support Files/Pods-RNChatFirebase-RNChatFirebaseTests/Pods-RNChatFirebase-RNChatFirebaseTests.release.xcconfig"; sourceTree = "<group>"; };
 		A2C8E5E12D01530A7D75189F /* Pods_RNChatFirebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNChatFirebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC9908F42AF1CA690006BCEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CCF5752E2AF268CA00EDDC15 /* RNChatFirebase.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RNChatFirebase.entitlements; path = RNChatFirebase/RNChatFirebase.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -88,6 +89,7 @@
 		13B07FAE1A68108700A75B9A /* RNChatFirebase */ = {
 			isa = PBXGroup;
 			children = (
+				CCF5752E2AF268CA00EDDC15 /* RNChatFirebase.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -506,6 +508,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = RNChatFirebase/RNChatFirebase.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RNChatFirebase/Info.plist;
@@ -534,6 +537,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = RNChatFirebase/RNChatFirebase.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = RNChatFirebase/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = rnchatfirebase;

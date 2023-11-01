@@ -1,47 +1,79 @@
-import React, {FC, useEffect, useLayoutEffect} from 'react';
+import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
   GestureResponderEvent,
+  ActivityIndicator,
 } from 'react-native';
 
 import tw from 'twrnc';
 
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-
-import {useNavigation} from '@react-navigation/native';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 
 const LoginScreen: FC = ({navigation}: any) => {
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
         '796074681554-0u979m1a7dc8u3hfodu80napq3tjpl2r.apps.googleusercontent.com',
     });
   });
+
   const signInWithGoogle = async () => {
     try {
+      setLoading(true);
       await GoogleSignin.hasPlayServices();
 
       const {idToken} = await GoogleSignin.signIn();
 
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-      console.log('credential: ', googleCredential);
       await auth().signInWithCredential(googleCredential);
 
       if (googleCredential.token) {
-        navigation.replace('Test');
+        navigation.replace('ChatsOverview');
       }
     } catch (error) {
       console.error('Google Sign-In Error: ', error);
     }
   };
 
-  const handleFBBtnClick = (event: GestureResponderEvent) => {
-    console.log('click fb btn');
+  const signInWithFacebook = async () => {
+    try {
+      setLoading(true);
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+
+      if (result.isCancelled) {
+        throw new Error('User cancelled the login process');
+      }
+
+      const data = await AccessToken.getCurrentAccessToken();
+
+      if (!data) {
+        throw new Error('Unable to get Facebook access token');
+      }
+
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      await auth().signInWithCredential(facebookCredential);
+
+      if (facebookCredential.token) {
+        navigation.replace('ChatsOverview');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <View
@@ -68,7 +100,7 @@ const LoginScreen: FC = ({navigation}: any) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={handleFBBtnClick}
+            onPress={signInWithFacebook}
             style={tw`shadow-lg bg-white p-3 rounded-full w-full mb-8`}>
             <View style={tw`flex-row justify-center items-center px-8 gap-4`}>
               <Image
