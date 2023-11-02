@@ -21,6 +21,16 @@ const LoginScreen: FC = ({navigation}: any) => {
       webClientId:
         '796074681554-0u979m1a7dc8u3hfodu80napq3tjpl2r.apps.googleusercontent.com',
     });
+
+    const unsubscribe = auth().onAuthStateChanged(currentUser => {
+      if (!currentUser) {
+        navigation.replace('Login');
+      } else {
+        navigation.replace('ChatsOverview');
+      }
+    });
+
+    return () => unsubscribe();
   });
 
   const signInWithGoogle = async () => {
@@ -82,14 +92,14 @@ const LoginScreen: FC = ({navigation}: any) => {
         style={tw`w-full h-full bg-white rounded-tl-[90px] flex items-center justify-between py-6 px-6 mt-6`}>
         <Image
           source={require('../assets/images/NTO-logo.png')}
-          style={tw`h-32 w-32 shadow-md`}
+          style={tw`h-32 w-32 shadow-md mt-12`}
         />
         <Text style={tw`text-xl font-bold my-10`}>Welcome to the NTO Chat</Text>
         <View style={tw`mt-24 flex-1 w-full px-4`}>
           <TouchableOpacity
             onPress={signInWithGoogle}
             style={tw`shadow-lg bg-white p-3 rounded-full w-full mb-8`}>
-            <View style={tw`flex-row justify-center items-center px-8 gap-4`}>
+            <View style={tw`flex-row justify-center items-center px-6 gap-4`}>
               <Image
                 source={require('../assets/images/google_icon.png')}
                 style={tw`h-8 w-8`}
@@ -101,13 +111,13 @@ const LoginScreen: FC = ({navigation}: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={signInWithFacebook}
-            style={tw`shadow-lg bg-white p-3 rounded-full w-full mb-8`}>
-            <View style={tw`flex-row justify-center items-center px-8 gap-4`}>
+            style={tw`shadow-lg bg-[#3F51B5] p-3 rounded-full w-full mb-8`}>
+            <View style={tw`flex-row justify-center items-center px-6 gap-4`}>
               <Image
                 source={require('../assets/images/facebook_icon.png')}
                 style={tw`h-8 w-8`}
               />
-              <Text style={tw`text-center text-gray-600 text-lg font-bold`}>
+              <Text style={tw`text-center text-white text-lg font-bold`}>
                 Sign in with Facebook
               </Text>
             </View>
