@@ -1235,7 +1235,7 @@ PODS:
     - Firebase/Auth (= 10.15.0)
     - React-Core
     - RNFBApp
-  - RNFBFirestore (18.6.1):
+  - RNFBFirestore (18.6.0):
     - Firebase/Firestore (= 10.15.0)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - React-Core
@@ -1503,7 +1503,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 3a8f7145d17cdd9f88e7b77666c94a09e4f759c8
   RNFBApp: 5e457a31687a849c91ca96af024ec90e2cdb9e6c
   RNFBAuth: f859a527c9b01197dc04676093042d9ebd4a31c9
-  RNFBFirestore: 8239b476a33ca1cf9a8b36ab95aed5862e039616
+  RNFBFirestore: 04909ab2513b8510fdd18af4d309524dcd54085f
   RNGoogleSignin: a6a612cce56a45ab701c5c5c6e36f5390522d100
   RNScreens: 3e56c56bd35436215a56f48a753e30e8ce018a09
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

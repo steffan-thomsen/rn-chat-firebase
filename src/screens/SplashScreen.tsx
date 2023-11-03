@@ -4,7 +4,11 @@ import auth from '@react-native-firebase/auth';
 
 import tw from 'twrnc';
 
-const SplashScreen: FC = ({navigation}: any) => {
+interface SplashScreenProps {
+  navigation: any;
+}
+
+const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
   useLayoutEffect(() => {
     checkLoggedUser();
   }, []);
@@ -13,8 +17,6 @@ const SplashScreen: FC = ({navigation}: any) => {
     auth().onAuthStateChanged(currentUser => {
       if (!currentUser) {
         navigation.replace('Login');
-      } else {
-        navigation.replace('ChatsOverview');
       }
     });
   };
@@ -26,7 +28,6 @@ const SplashScreen: FC = ({navigation}: any) => {
         resizeMode="contain"
       />
       <ActivityIndicator size={'large'} color={'#000'} />
-      <Text>SplashScreen</Text>
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useState, FC, useLayoutEffect} from 'react';
+import React, {useState, FC, useLayoutEffect, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
@@ -32,7 +33,7 @@ const ChatsOverviewScreen: React.FC<ChatsOverviewScreenProps> = ({
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [chatRooms, setChatRooms] = useState<ChatRoom[] | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const chatRoomQuery = query(
       collection(firestoreDB, 'chatRooms'),
       orderBy('_id', 'desc'),
@@ -47,7 +48,19 @@ const ChatsOverviewScreen: React.FC<ChatsOverviewScreenProps> = ({
     });
 
     return unsubscribeChatRooms;
-  }, []);
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(currentUser => {
+      if (!currentUser) {
+        setUser(null);
+      }
+
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   return (
     <View style={tw`flex-1`}>
@@ -59,15 +72,14 @@ const ChatsOverviewScreen: React.FC<ChatsOverviewScreenProps> = ({
             resizeMode="contain"
             style={tw`w-12 h-12`}
           />
-          <Image
-            source={{uri: user?.photoURL || undefined}}
-            resizeMode="contain"
-            style={tw`w-14 h-14 rounded-full`}
-          />
-          {/* <Text onPress={logoutHandler}>logout</Text> */}
-          {/*           <Text onPress={() => navigation.navigate('AddChatRoom')}>
-            add chat room
-          </Text> */}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ProfileScreen')}>
+            <Image
+              source={{uri: user?.photoURL || undefined}}
+              resizeMode="contain"
+              style={tw`w-14 h-14 rounded-full`}
+            />
+          </TouchableOpacity>
         </View>
 
         <ScrollView style={tw`w-full px-4 pt-4`}>

@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import tw from 'twrnc';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';

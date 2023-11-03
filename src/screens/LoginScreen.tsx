@@ -13,25 +13,21 @@ import tw from 'twrnc';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import LoadingOverlay from '../components/LoadingOverlay';
 
-const LoginScreen: FC = ({navigation}: any) => {
+interface LoginScreenProps {
+  navigation: any;
+}
+
+const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
         '796074681554-0u979m1a7dc8u3hfodu80napq3tjpl2r.apps.googleusercontent.com',
     });
-
-    const unsubscribe = auth().onAuthStateChanged(currentUser => {
-      if (!currentUser) {
-        navigation.replace('Login');
-      } else {
-        navigation.replace('ChatsOverview');
-      }
-    });
-
-    return () => unsubscribe();
-  });
+  }, []);
 
   const signInWithGoogle = async () => {
     try {
@@ -43,10 +39,6 @@ const LoginScreen: FC = ({navigation}: any) => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       await auth().signInWithCredential(googleCredential);
-
-      if (googleCredential.token) {
-        navigation.replace('ChatsOverview');
-      }
     } catch (error) {
       console.error('Google Sign-In Error: ', error);
     }
@@ -75,56 +67,61 @@ const LoginScreen: FC = ({navigation}: any) => {
       );
 
       await auth().signInWithCredential(facebookCredential);
-
-      if (facebookCredential.token) {
-        navigation.replace('ChatsOverview');
-      }
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
   return (
-    <View
-      style={tw`flex justify-between items-center bg-black h-full w-full pt-28`}>
-      <View
-        style={tw`w-full h-full bg-white rounded-tl-[90px] flex items-center justify-between py-6 px-6 mt-6`}>
-        <Image
-          source={require('../assets/images/NTO-logo.png')}
-          style={tw`h-32 w-32 shadow-md mt-12`}
-        />
-        <Text style={tw`text-xl font-bold my-10`}>Welcome to the NTO Chat</Text>
-        <View style={tw`mt-24 flex-1 w-full px-4`}>
-          <TouchableOpacity
-            onPress={signInWithGoogle}
-            style={tw`shadow-lg bg-white p-3 rounded-full w-full mb-8`}>
-            <View style={tw`flex-row justify-center items-center px-6 gap-4`}>
-              <Image
-                source={require('../assets/images/google_icon.png')}
-                style={tw`h-8 w-8`}
-              />
-              <Text style={tw`text-center text-gray-600 text-lg font-bold`}>
-                Sign in with Google
-              </Text>
+    <>
+      {loading && <LoadingOverlay message="Logging you in..." />}
+      {!loading && (
+        <View
+          style={tw`flex justify-between items-center bg-black h-full w-full pt-28`}>
+          <View
+            style={tw`w-full h-full bg-white rounded-tl-[90px] flex items-center justify-between py-6 px-6 mt-6`}>
+            <Image
+              source={require('../assets/images/NTO-logo.png')}
+              style={[tw`h-32 w-32 mt-12`, {elevation: 2}]}
+            />
+            <Text style={tw`text-xl font-bold my-10`}>
+              Welcome to the NTO Chat
+            </Text>
+            <View style={tw`mt-24 flex-1 w-full px-4`}>
+              <TouchableOpacity
+                onPress={signInWithGoogle}
+                style={tw`shadow-lg bg-white p-3 rounded-full w-full mb-8`}>
+                <View
+                  style={tw`flex-row justify-center items-center px-6 gap-4`}>
+                  <Image
+                    source={require('../assets/images/google_icon.png')}
+                    style={[tw`h-8 w-8`, {elevation: 2}]}
+                  />
+                  <Text style={tw`text-center text-gray-600 text-lg font-bold`}>
+                    Sign in with Google
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={signInWithFacebook}
+                style={tw`shadow-lg bg-[#3F51B5] p-3 rounded-full w-full mb-8`}>
+                <View
+                  style={tw`flex-row justify-center items-center px-6 gap-4`}>
+                  <Image
+                    source={require('../assets/images/facebook_icon.png')}
+                    style={[tw`h-8 w-8`, {elevation: 2}]}
+                  />
+                  <Text style={tw`text-center text-white text-lg font-bold`}>
+                    Sign in with Facebook
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={signInWithFacebook}
-            style={tw`shadow-lg bg-[#3F51B5] p-3 rounded-full w-full mb-8`}>
-            <View style={tw`flex-row justify-center items-center px-6 gap-4`}>
-              <Image
-                source={require('../assets/images/facebook_icon.png')}
-                style={tw`h-8 w-8`}
-              />
-              <Text style={tw`text-center text-white text-lg font-bold`}>
-                Sign in with Facebook
-              </Text>
-            </View>
-          </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </View>
+      )}
+    </>
   );
 };
 

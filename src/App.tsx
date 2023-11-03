@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import LoginScreen from './screens/LoginScreen';
@@ -7,6 +7,9 @@ import SplashScreen from './screens/SplashScreen';
 import AddChatRoomScreen from './screens/chat/AddChatRoomScreen';
 import ChatScreen from './screens/chat/ChatScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 
 type RootStackParamList = {
   Login: undefined;
@@ -19,17 +22,43 @@ type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function App() {
+function AuthStack() {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Splash" component={SplashScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function AuthenticatedStack() {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="ChatsOverview" component={ChatsOverviewScreen} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function App({navigation}: any) {
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(currentUser => {
+      if (!currentUser) {
+        setUser(null);
+      }
+
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        {/* <Stack.Screen name="Splash" component={SplashScreen} /> */}
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="ChatsOverview" component={ChatsOverviewScreen} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} />
-        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-        {/* <Stack.Screen name="AddChatRoom" component={AddChatRoomScreen} /> */}
-      </Stack.Navigator>
+      {user ? <AuthenticatedStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }

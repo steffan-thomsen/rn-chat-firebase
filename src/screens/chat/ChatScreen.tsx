@@ -103,14 +103,14 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(currentUser => {
       if (!currentUser) {
-        navigation.replace('Login');
+        setUser(null);
       }
 
       setUser(currentUser);
     });
 
     return () => unsubscribe();
-  }, [navigation]);
+  }, [user]);
 
   return (
     <View style={tw`flex-1`}>
@@ -154,9 +154,9 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
               </View>
             ) : (
               <>
-                {messages?.map((msg, i) =>
+                {messages?.map((msg, idx) =>
                   msg.user.email === user?.email ? (
-                    <View style={tw`m-1`} key={i}>
+                    <View style={tw`m-1`} key={idx}>
                       <View
                         style={[
                           tw`px-4 py-2 relative rounded-xl bg-black w-auto items-end`,
@@ -182,7 +182,7 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
                     </View>
                   ) : (
                     <>
-                      <View key={i} style={{alignSelf: 'flex-start'}}>
+                      <View key={idx} style={{alignSelf: 'flex-start'}}>
                         <View
                           style={tw`flex-row items-center justify-center gap-2`}>
                           <Image
@@ -197,13 +197,19 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
                                 {alignSelf: 'flex-start'},
                               ]}>
                               <Text
-                                style={tw`text-white text-base font-semibold`}>
+                                style={tw`text-black text-base font-semibold`}>
                                 {msg.message}
                               </Text>
                             </View>
                             <View style={{alignSelf: 'flex-start'}}>
                               {msg?.timeStamp?.seconds && (
-                                <Text style={tw`text-[12px] font-semibold`}>
+                                <Text
+                                  style={[
+                                    tw`text-[12px] font-semibold text-gray-500`,
+                                    {
+                                      color: 'black',
+                                    },
+                                  ]}>
                                   {new Date(
                                     parseInt(msg?.timeStamp?.seconds) * 1000,
                                   ).toLocaleTimeString('da-DK', {
