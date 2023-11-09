@@ -24,6 +24,7 @@ import {
 } from 'firebase/firestore';
 
 import {firestoreDB} from '../../config/firebase.config';
+// import ImagePicker, {launchCamera} from 'react-native-image-picker';
 
 interface ChatScreenProps {
   route: any;
@@ -47,9 +48,19 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[] | null>(null);
+
   const {chatRoom} = route.params;
 
   const TextInputRef = useRef<TextInput>(null);
+
+  /*   const imageUploadHandler = async () => {
+    const image = ImagePicker.launchImageLibrary({
+      mediaType: 'photo',
+      quality: 1,
+    });
+
+    console.log('image: ', image);
+  }; */
 
   const openKeyboardHandler = () => {
     if (TextInputRef.current) {
@@ -80,6 +91,7 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
       console.log('Message added successfully!');
     } catch (error) {
       console.log('Error: ', error);
+      throw error;
     }
   };
 
@@ -241,6 +253,12 @@ const ChatScreen: FC<ChatScreenProps> = ({route, navigation}) => {
                   style={tw`h-6 w-6`}
                 />
               </TouchableOpacity>
+              {/*               <TouchableOpacity onPress={imageUploadHandler}>
+                <Image
+                  source={require('../../assets/images/camera.png')}
+                  style={tw`h-6 w-6`}
+                />
+              </TouchableOpacity> */}
               <TextInput
                 style={tw`flex-1 text-base h-8 text-black font-semibold items-center justify-center pb-0 pt-0`}
                 placeholder="Type your message"

@@ -4,12 +4,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import LoginScreen from './screens/LoginScreen';
 import ChatsOverviewScreen from './screens/chat/ChatsOverviewScreen';
 import SplashScreen from './screens/SplashScreen';
-import AddChatRoomScreen from './screens/chat/AddChatRoomScreen';
 import ChatScreen from './screens/chat/ChatScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useNavigation} from '@react-navigation/native';
-import {CommonActions} from '@react-navigation/native';
 
 type RootStackParamList = {
   Login: undefined;
@@ -41,7 +38,7 @@ function AuthenticatedStack() {
   );
 }
 
-function App({navigation}: any) {
+function App() {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
   useEffect(() => {
